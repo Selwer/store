@@ -1,6 +1,8 @@
 
 Когда нет сложных запросов, использую Query Builder
 
+```php
+//php code
 public function findAllDoc(int $page = 1, int $pageSize = 10, array $filter = []): Paginator
 {
     $qb = $this->createQueryBuilder('d')
@@ -25,3 +27,4 @@ public function findAllDoc(int $page = 1, int $pageSize = 10, array $filter = []
 
     return (new Paginator($qb, $pageSize))->paginate($page);
 }
+```
