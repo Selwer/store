@@ -1,0 +1,104 @@
+{% set pageTotal = (itemTotal / itemPage)|round(0, 'ceil') %}
+
+{% if pageTotal > 1 and page > 0 and page <= pageTotal %}
+
+    {# {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %} #}
+    {% set currentPath = linkPagination %}
+
+    {% set needFirstPage = false %}
+    {% set needLastPage = false %}
+    
+    {% if pageTotal <= 6 %}
+        {% set pageFrom = 1 %}
+        {% set pageTo = pageTotal %}
+        {% set needFirstPage = false %}
+        {% set needLastPage = false %} 
+    {% elseif page <= 3 %}
+        {% set pageFrom = 1 %}
+        {% set pageTo = 5 %}
+        {% set needLastPage = true %}
+    {% elseif pageTotal - page <= 3 %}
+        {% if pageTotal - page == 3 %}
+            {% set countLimit = 5 %}
+        {% else %}
+            {% set countLimit = 4 %}
+        {% endif %}
+        {% set pageFrom = pageTotal - countLimit %}
+        {% set pageTo = pageTotal %}
+        {% set needFirstPage = true %}
+    {% else %}
+        {% set pageFrom = page - 2 %}
+        {% set pageTo = page + 2 %}
+        {% set needFirstPage = true %}
+        {% set needLastPage = true %}
+    {% endif %}
+
+<nav>
+    <ul class="pagination justify-content-center"> 
+
+	{% if page > 1 %}
+        {% set firstPageLink = currentPath ~ '&page=' ~ (page - 1) %}
+        {% if page - 1 == 1 %}
+            {% set firstPageLink = linkPagination %}
+        {% endif %}
+        <li class="page-item">
+            <a class="page-link" href="{{ firstPageLink }}" tabindex="-1">Предыдущая</a>
+        </li>
+	{% endif %}
+	
+	{% if needFirstPage %}
+        {% set activeClass = '' %}
+        {% if page == 1 %}
+            {% set activeClass = ' active' %}
+        {% endif %}
+	    <li class="page-item{{ activeClass }}">
+            <a class="page-link" href="{{ linkPagination }}">1</a>
+        </li>
+	    {% if pageFrom > 2 %}
+	        <li class="page-item"><span class="page-link page-link-empty">...</span></li>
+	    {% endif %}
+	{% endif %}
+	
+    {% for i in pageFrom..pageTo %}
+        {% set activeClass = '' %}
+	    {% if i > 0 %}
+
+            {% set pageLink = currentPath ~ '&page=' ~ i %}
+            {% if i == 1 %}
+                {% set pageLink = linkPagination %}
+            {% endif %}
+
+    	    {% if i == page %}
+                <li class="page-item active">
+                    <span class="page-link">{{ i }}</span>
+                </li>
+            {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ pageLink }}">{{ i }}</a>
+                </li>
+            {% endif %}
+    	{% endif %}
+	{% endfor %}
+	
+    {% if needLastPage %}
+        <li class="page-item"><span class="page-link page-link-empty">...</span></li>
+        {% set activeClass = '' %}
+        {% if page == pageTotal %}
+            {% set activeClass = ' active' %}
+        {% endif %}
+        {% if pageTotal - pageTo >= 1 %}
+	        <li class="page-item{{ activeClass }}">
+                <a class="page-link" href="{{ currentPath }}&page={{ pageTotal }}">{{ pageTotal }}</a>
+            </li>
+        {% endif %}
+	{% endif %}
+	
+	{% if page < pageTotal %}
+        <li class="page-item">
+            <a class="page-link" href="{{ currentPath }}&page={{ page + 1 }}" tabindex="-1">Следующая</a>
+        </li>
+	{% endif %}
+
+    </ul>
+</nav>
+{% endif %}

@@ -1,0 +1,20 @@
+<div class="product-detail-ch-lbl">
+    <div>Производитель</div>
+    <div>Вес</div>
+    <div>Объем</div>
+    <div>Размер</div>
+    <div>Технология</div>
+    <div>Тип</div>
+    <div>Серия</div>
+    <div>Модель</div>
+</div>
+<div class="product-detail-ch-val">
+    <div>{{ product.brand }}</div>
+    <div>{{ product.weight|number_format(3, '.', ' ') }}</div>
+    <div>{{ product.volume|number_format(3, '.', ' ') }}</div>
+    <div>{{ product.acb_size }}</div>
+    <div>{{ product.acb_tech }}</div>
+    <div>{{ product.acb_type }}</div>
+    <div>{{ product.acb_seria }}</div>
+    <div>{{ product.acb_model }}</div>
+</div>

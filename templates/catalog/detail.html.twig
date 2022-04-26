@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block breadcrumbs %}
+    {{ include('partions/breadcrumbs.html.twig', 
+        {
+            breadcrumbs: breadcrumbs
+        }) 
+    }}
+{% endblock %}
+
+{% block body %}
+
+    <div class="container" style="margin-top: 10px; margin-bottom: 10px;">
+        <div class="title">{{ product.name }}</div>
+        <div class="article">Артикул: {{ product.sku }}</div>
+        <div class="product-detail">
+            <div class="product-detail-img">
+                {% set images = json_decode(product.image) %}
+                {% if images|length > 0 %}
+                <img src="/media/{{ images[0] }}">
+                {% endif %}
+            </div>
+            <div class="product-detail-info">
+                <div class="price1">Розничная цена 
+                {% if isCertified and product.quantity > 0 %}
+                    {{ product.price|number_format(0, '.', ' ') }}
+                {% else %}
+                    -
+                {% endif %}
+                </div>
+                <div class="price2">Дилерская цена 
+                {% if isCertified and product.quantity > 0 %}
+                    {{ product.price_user|number_format(0, '.', ' ') }}
+                {% else %}
+                    -
+                {% endif %}
+                </div>
+                <div class="count">
+                    {% if isCertified %}
+                        {% if product.quantity >= 12 %}
+                            {% set quantityText = 'много' %}
+                            {% set quantityClass = '' %}
+                        {% elseif product.quantity == 0 %}
+                            {% set quantityText = 'под заказ' %}
+                            {% set quantityClass = 'indicator0' %}
+                        {% else %}
+                            {% set quantityText = 'мало' %}
+                            {% set quantityClass = 'indicator-l' %}
+                        {% endif %}
+                        <div class="indicator {{ quantityClass }}">
+                            <div class="indicator-lo"></div>
+                            <div class="indicator-lo"></div>
+                            <div class="indicator-lo indicator-li"></div>
+                            <div class="indicator-lo indicator-li"></div>
+                        </div>
+                        <div>{{ quantityText }}</div>
+                    {% else %}
+                        <div class="green-t">в наличии</div>
+                    {% endif %}
+                </div>
+                <div class="product-add-cart" data-quantity="{{ product.quantity }}">
+                    <div>
+                        {% if isCertified %}
+                            <div class="product-quantity-block">
+                                <a class="product-minus" href="#">-</a>
+                                <div><input class="product-quantity-input" name="quantity" value="1"></div>
+                                <a class="product-plus" href="#">+</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        {% if isCertified %}
+                            {% if is_cart %}
+                                <button class="btn-addcart-product disabled" type="button" data-guid="{{ product.id }}" disabled="disabled">В корзине</button>
+                            {% else %}
+                                <button class="btn-addcart-product" type="button" data-guid="{{ product.id }}">В корзину</button>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div style="font-weight: bold; font-size: 16px; margin-top: 100px; margin-bottom: 10px;">Характиристики</div>
+                <div class="product-detail-ch-bl">
+                    {{ include('catalog/partions/'~ type ~'.html.twig',
+                        {
+                            product: product
+                        }
+                    ) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

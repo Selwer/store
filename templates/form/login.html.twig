@@ -1,0 +1,38 @@
+<div class="modal-block" id="login-form-modal">
+    <div class="login-form-modal-block">
+        <div class="login-form-modal-title">
+            Вход
+        </div>
+        <div class="login-form-modal-text">
+            Пожалуйста, укажите в отведенном поле свой личный логин и подтвердите ввод!
+        </div>
+        <div class="login-error-text"></div>
+        <div class="fields-form">
+            <div class="fields-form-bl">
+                <input id="login_email" type="text" name="email" placeholder="Ваш email">
+            </div>
+            <div class="fields-form-bl">
+                <input id="login_pass" type="password" name="pass" placeholder="Пароль">
+            </div>
+        </div>
+        <div class="block-flex">
+            <div class="rememberme-bl field-cont">
+                <input class="field-rememberme field" type="checkbox" id="remember_me" name="_remember_me" checked>
+                <label class="" for="remember_me">Запомнить меня</label>
+            </div>
+            <div class="text-forget">
+                <a href="{{ path('app_forgot_password_request') }}">Забыли пароль?</a>
+            </div>
+        </div>
+        <div class="login-btn-block">
+            <button class="btn btn-blue btn-login" type="button">
+                Логин
+                <span class="login-btn-loader spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            </button>
+        </div>
+        <div class="login-link-reg-block">
+            <a class="login-link-reg" href="{{ path('ap_registration') }}">Еще не являетесь нашим клиентом?<br>Запросите получение аккаунта!</a>
+        </div>
+        <input class="ces_login" type="hidden" name="_ces_login" value="{{ csrf_token('authenticate') }}">
+    </div>
+</div>

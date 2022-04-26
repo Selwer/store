@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Контакты{% endblock %}
+
+{% block breadcrumbs %}
+    {{ include('partions/breadcrumbs.html.twig', 
+        {
+            breadcrumbs: breadcrumbs
+        }) 
+    }}
+{% endblock %}
+
+{% block body %}
+
+    <div class="container contacts">
+
+        <div class="title3">Контакты</div>
+
+        <div class="contacts-info">
+            <div class="contacts-info-address">Московская область, г. Балашиха, ##</div>
+            <div class="contacts-info-phone">+7 ### ### ##</div>
+            <div class="contacts-info-time-email">
+                <div class="contacts-info-time">пн. - пт. 9:00 - 18:00</div>
+                <div class="contacts-info-email2"><img src="/img/email-contact.png"></div>
+            </div>
+        </div>
+
+        <div id="map">
+            <script type="text/javascript" charset="utf-8" async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor########&amp;width=100%25&amp;height=372&amp;lang=ru_RU&amp;scroll=true"></script>
+        </div>
+
+        <div class="title3">Связаться  с нами</div>
+        <div style="margin-bottom: 30px;">Если у вас есть вопросы, напишите нам. Мы свяжемся с вами в ближайшее время.</div>
+
+        {% for message in app.flashes('notice') %}
+            <div class="flash flash-notice">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <div>
+            {% set action = path('contacts') ~ '#contact_form' %}
+            {{ form_start(feedback_form, {'action': action, 'attr': {'id': 'contact_form'}}) }}
+                <div class="block-form {{ (form_errors(feedback_form.name) is empty ? '' : 'form-field-error') }}">
+                    {# <input id="form_form_fields_name" name="form_form[fields][name]" value="" placeholder="Ваше имя"> #}
+                    {{ form_widget(feedback_form.name, {'attr': {'placeholder': 'Ваше имя'}}) }}
+                    <div class="form-error">
+                        {{ form_errors(feedback_form.name) }}
+                    </div>
+                </div>
+                <div class="block-form block-form-two">
+                    <div style="width: 49%;" class="{{ (form_errors(feedback_form.phone) is empty ? '' : 'form-field-error') }}">
+                        {# <input id="form_form_fields_phone" name="form_form[fields][phone]" value="" placeholder="Телефон"> #}
+                        {{ form_widget(feedback_form.phone, {'attr': {'placeholder': 'Телефон'}}) }}
+                        <div class="form-error">
+                            {{ form_errors(feedback_form.phone) }}
+                        </div>
+                    </div>
+                    <div style="width: 49%;" class="{{ (form_errors(feedback_form.email) is empty ? '' : 'form-field-error') }}">
+                        {# <input id="form_form_fields_email" name="form_form[fields][email]" value="" placeholder="Email"> #}
+                        {{ form_widget(feedback_form.email, {'attr': {'placeholder': 'Email'}}) }}
+                        <div class="form-error">
+                            {{ form_errors(feedback_form.email) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="block-form {{ (form_errors(feedback_form.comment) is empty ? '' : 'form-field-error') }}">
+                    {# <textarea id="form_form_fields_comment" name="form_form[fields][comment]" value="" placeholder="Ваш комментарий"></textarea> #}
+                    {{ form_widget(feedback_form.comment, {'attr': {'placeholder': 'Ваш комментарий'}}) }}
+                    <div class="form-error">
+                        {{ form_errors(feedback_form.comment) }}
+                    </div>
+                </div>
+                {% for message in app.flashes('error') %}
+                    <div class="flash flash-error">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                <div class="g-recaptcha" data-sitekey="##########"></div>
+                <hr>
+                <div class="block-form-bnt block-form-flex">
+                    <div class="text-f14">Нажимая на кнопку «Отправить заявку», вы даёте своё согласие на обработку персональных данных</div>
+                    <div>
+                        <button type="submit" class="form-bnt" name="submit">
+                            Отправить заявку
+                        </button>
+                    </div>
+                </div>
+            {{ form_end(feedback_form) }}
+
+            {# {{ form_start(feedback_form) }}
+                <div class="my-custom-class-for-errors">
+                    {{ form_errors(feedback_form) }}
+                </div>
+                <div>
+                    {{ form_widget(feedback_form.fields) }}
+                </div>
+                <div class="block-form">
+                    <input id="form_form_fields_name" name="form_form[fields][name]" value="" placeholder="Ваше имя">
+                </div>
+                <div class="block-form block-form-two">
+                    <div style="width: 49%;">
+                        <input id="form_form_fields_phone" name="form_form[fields][phone]" value="" placeholder="Телефон">
+                    </div>
+                    <div style="width: 49%;">
+                        <input id="form_form_fields_email" name="form_form[fields][email]" value="" placeholder="Email">
+                    </div>
+                </div>
+                <div class="block-form">
+                    <textarea id="form_form_fields_comment" name="form_form[fields][comment]" value="" placeholder="Ваш комментарий"></textarea>
+                </div>
+                <div class="block-form-bnt block-form-flex">
+                    <div class="text-f14">Нажимая на кнопку «Отправить заявку», вы даёте своё согласие на обработку персональных данных</div>
+                    <div>
+                        <button type="submit" class="form-bnt" name="submit">
+                            Отправить заявку
+                        </button>
+                    </div>
+                </div>
+            {{ form_end(feedback_form) }} #}
+        </div>
+    </div>
+
+{% endblock %}

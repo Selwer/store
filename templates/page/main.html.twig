@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block body %}
+
+    <div class="main-banner">
+        <img src="/img/main-banner_.jpg">
+    </div>
+
+    <div class="container" style="margin-top: 50px; margin-bottom: 10px;">
+        <div class="title-main">
+            Товарные группы
+        </div>
+
+        <div class="catalog-main">
+            <table>
+                <tr>
+                    <td>
+                        <a href="/catalog/tires">
+                            <div class="catalog-main-img"><img src="/img/main-tires.jpg"></div>
+                            <div class="catalog-main-title">Шины</div>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="/catalog/parts">
+                            <div class="catalog-main-img"><img src="/img/main-parts.jpg"></div>
+                            <div class="catalog-main-title">Запасные части</div>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="/catalog/forks">
+                            <div class="catalog-main-img"><img src="/img/main-fork.jpg"></div>
+                            <div class="catalog-main-title">Вилы</div>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="/catalog/acb">
+                            <div class="catalog-main-img"><img src="/img/main-acb.jpg"></div>
+                            <div class="catalog-main-title">АКБ</div>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="/catalog/wheels">
+                            <div class="catalog-main-img"><img src="/img/main-wheel.jpg"></div>
+                            <div class="catalog-main-title">Диски и колеса</div>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="main-brand brand-items">
+            <div><img src="/img/brand/toyota-logo.png"></div>
+            <div><img src="/img/brand/komatsu-logo.png"></div>
+            <div><img src="/img/brand/tcm-logo.png"></div>
+            <div><img src="/img/brand/uca-logo.png"></div>
+            <div><img src="/img/brand/isuzu-logo.png"></div>
+            <div><img src="/img/brand/nissan-logo.png"></div>
+            <div><img src="/img/brand/advance-logo.png"></div>
+            <div><img src="/img/brand/hangcha-logo.png"></div>
+            <div><img src="/img/brand/heli-logo.png"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="bg-text">
+            <h1>ИМ Грузовики №1 в Москве</h1>
+
+            <p>Множество факторов влияет на безопасность движения автомобильного транспорта. Основные из них — качество 
+            сцепления колес с дорогой и управляемость автомобилем в самых сложных условиях. В основном это обеспечивается 
+            правильным подбором шин по марке автомобиля.</p>
+
+            <h2>Почему важно купить шины, соответствующие марке автомобиля</h2>
+
+            <p>Инженеры с помощью сложных расчетов и испытаний подбирают оптимальные параметры автошин 
+            для каждой выпускаемой с конвейера модели. Если купить резину на авто, рекомендованную разработчиком, 
+            можно не допустить преждевременного износа его узлов и ухудшения технических характеристик, 
+            а несоблюдение соответствия маркировки при выборе резины увеличивает риск возникновения аварийной ситуации.</p>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Мой аккаунт - Заказы{% endblock %}
+
+{% block breadcrumbs %}
+    {{ include('partions/breadcrumbs.html.twig', 
+        {
+            breadcrumbs: breadcrumbs
+        }) 
+    }}
+{% endblock %}
+
+{% block stylesheets %}
+    <link href="{{ asset('css/jquery-ui.min.css') }}" type="text/css" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+
+        <div class="title2">Заказы</div>
+
+         {% if error is defined %}
+
+            <div class="alert alert-danger" role="alert">Ошибка получения данных! Попробуйие позже.</div>
+
+        {% else %}
+
+            <div class="orders-filter-cont">
+                <form method="get" action="{{ link }}">
+                    <div class="orders-filter">
+                        <div class="orders-filter-row">
+                            <div class="orders-filter-bl" style="margin-right: 16px;">
+                                <input name="numorder" placeholder="Номер заказа" value="{{ (filter['numorder'] is defined ? filter['numorder'] : '') }}">
+                            </div>
+                            <div class="orders-filter-bl" style="margin-right: 16px;">
+                                <select name="status" style="width: 200px;">
+                                    <option value="">Статус заказа</option>
+                                    {% for status_item in status %}
+                                        <option {{ (filter['status'] is defined and filter['status'] == status_item ? 'selected' : '') }} value="{{ status_item }}">{{ status_item }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="orders-filter-bl" style="margin-right: 16px;">
+                                <input name="date_from" type="text" id="date_from" placeholder="Дата заказа с" autocomplete="off" value="{{ (filter['date_from'] is defined ? filter['date_from'] : '') }}">
+                            </div>
+                            <div class="orders-filter-bl">
+                                <input name="date_to" type="text" id="date_to" placeholder="Дата заказа по" autocomplete="off" value="{{ (filter['date_to'] is defined ? filter['date_to'] : '') }}">
+                            </div>
+                        </div>
+                        <div class="orders-filter-row">
+                            <div class="orders-filter-bl" style="margin-right: 16px;">
+                                <button class="btn-n filter-submit" type="submit">Показать</button>
+                            </div>
+                            <div class="orders-filter-bl">
+                                <a class="filter-reset" href="{{ path('profile_orders') }}">Сбросить</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="orders-history">
+                <table class="catalog-table-list orders-history-list">
+                    <tr class="orders-history-cell-sort">
+                        <td><a href="#">Номер заказа</a></td>
+                        <td><a href="#">Дата</a></td>
+                        <td><a href="#">Статус</a></td>
+                        <td><a href="#">Сумма</a></td>
+                    </tr>
+                    <tr style="height: 10px;">
+                        <td></td>
+                    </tr>
+                    {% for order in orders %}
+                        {% set link = order.orderNumber ~ '|' ~ order.orderDate|url_encode %}
+                        <tr class="orders-history-item">
+                            <td><a href="/profile/order/{{ link }}">{{ order.orderNumber }}</a></td>
+                            <td><a href="/profile/order/{{ link }}">{{ order.orderDate }}</a></td>
+                            <td><a href="/profile/order/{{ link }}">{{ order.orderStatus }}</a></td>
+                            <td><a href="/profile/order/{{ link }}">{{ (order.orderSum > 0 ? order.orderSum|number_format(2, '.', ' ') : 'Под запрос') }}</a></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+            {{ include('partions/pagination.html.twig', 
+                {
+                    itemTotal: pagination.itemTotal,
+                    itemPage: pagination.itemPage,
+                    page: pagination.page,
+                    view: pagination.view,
+                    indexPage: pagination.indexPage,
+                    linkPagination: pagination.linkPagination
+                }) 
+            }}
+
+        {% endif %}
+
+    </div>
+
+    {% block javascripts %}
+        <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
+        <script src="{{ asset('js/datepicker-ru.js') }}"></script>
+        <script>
+            $(document).ready(function() {
+                $.datepicker.setDefaults($.datepicker.regional['ru']);
+                $('#date_from').datepicker({
+                    dateFormat: 'yy-mm-dd'
+                });
+                $('#date_to').datepicker({
+                    dateFormat: 'yy-mm-dd'
+                });
+            });
+        </script>
+    {% endblock %}
+
+{% endblock %}

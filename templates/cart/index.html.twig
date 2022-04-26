@@ -1,0 +1,218 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Корзина{% endblock %}
+
+{% block breadcrumbs %}
+    {{ include('partions/breadcrumbs.html.twig', 
+        {
+            breadcrumbs: breadcrumbs
+        }) 
+    }}
+{% endblock %}
+
+{% block body %}
+
+    {% set weight = 0 %}
+    {% set summ = 0 %}
+    {% set count = 0 %}
+    {% for product in products %}
+        {% set weight = weight + product.product_weight * (product.cart_quantity > product.product_quantity ? product.product_quantity : product.cart_quantity) %}
+        {% set count = count + 1 %}
+    {% endfor %}
+
+    {% set weight2 = 0 %}
+    {% set count2 = 0 %}
+    {% for productZ in productsPodZapros %}
+        {% set weight2 = weight2 + productZ.product_weight * productZ.cart_quantity %}
+        {% set count2 = count2 + 1 %}
+    {% endfor %}
+
+    <div class="container">
+
+        {% if isLogin == false %}
+
+            <div style="margin-bottom: 20px;" class="cart-text alert-danger alert">
+                Для оформления, пожалуйста, <a href="#" class="btn-login-header">авторизуйтесь</a> или <a href="{{ path('ap_registration') }}">зарегистрируйтесь</a>.
+            </div>
+
+        {% elseif isCertified == false %}
+
+            <div style="margin-bottom: 20px;" class="cart-text alert-danger alert">
+                Вы не можете оформлять заказы. Вам нужно обратится к менеджеру.
+            </div>
+
+        {% else %}
+
+            {% if count > 0 or count2 > 0 %}
+
+                <form method="post" name="cart">
+                    <input name="cart" type="hidden" value="yes">
+
+                    {% if count > 0 %}
+                        <h1 class="cart-title">Корзина покупок (вес {{ weight|round(1, 'ceil')|number_format(1, '.', ' ') }} кг)</h1>
+
+                        <div class="cart-list">
+                            <table class="table-cart">
+                                <tr class="table-cart-header">
+                                    <td class="cart-name" style="padding-left: 37px;">Название</td>
+                                    <td class="cart-sku">Артикул</td>
+                                    <td class="cart-brand">Производитель</td>
+                                    <td class="cart-weight">Вес, кг</td>
+                                    <td class="cart-quantity">Количество</td>
+                                    {# <td class="cart-stock">Наличие</td> #}
+                                    <td class="cart-delivery">Срок поставки</td>
+                                    <td class="cart-price">Цена за шт.</td>
+                                    <td class="cart-total">Всего</td>
+                                </tr>
+                                {% for product in products %}
+                                    {% set summ = summ + (product.product_price_user * product.cart_quantity) %}
+                                    <tr class="table-cart-item product-id-{{ product.product_id }} {{ (errors[product.product_id] is defined ? ' table-cart-item-error' : '') }}" data-quantity="{{ product.product_quantity }}" data-id="{{ product.product_id }}" data-z="0">
+                                        <td>
+                                            <div class="cart-prod-name">
+                                                <div class="del-prod"><a class="product-del" href="#"><img src="/img/delete.png"></a></div>
+                                                <div>{{ product.product_name }}
+                                                    {% if errors[product.product_id] is defined %}
+                                                    <div class="cart-error">{{ errors[product.product_id].text }}</div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>{{ product.product_sku }}</td>
+                                        <td>{{ product.product_brand }}</td>
+                                        <td>{{ product.product_weight|number_format(3, '.', ' ') }}</td>
+                                        <td>
+                                            <div class="product-add-cart" data-quantity="{{ product.product_quantity }}">
+                                                <div>
+                                                    <div class="product-quantity-block">
+                                                        <a class="product-minus" href="#">-</a>
+                                                        <div>
+                                                            <input type="text" class="product-quantity-input" name="quantity[{{ product.product_id }}]" value="{{ product.cart_quantity }}">
+                                                        </div>
+                                                        <a class="product-plus" href="#">+</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        {# <td>{{ product.product_quantity }}</td> #}
+                                        <td>1-2 дня</td>
+                                        <td class="text-right">{{ product.product_price_user|number_format(2, '.', ' ') }} р.</td>
+                                        <td class="text-right">{{ (product.product_price_user * product.cart_quantity)|number_format(2, '.', ' ') }} р.</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+
+                        <div class="cart-total-block">
+                            <table class="cart-total-bl">
+                                <tr>
+                                    <td class="cart-total-name">Сумма:</td>
+                                    <td class="cart-total-val">{{ summ|number_format(2, '.', ' ') }} р.</td>
+                                </tr>
+                                <tr>
+                                    <td class="cart-total-name">Итого:</td>
+                                    <td class="cart-total-val">{{ summ|number_format(2, '.', ' ') }} р.</td>
+                                </tr>
+                                <tr>
+                                    <td class="cart-total-name">Общий вес:</td>
+                                    <td class="cart-total-val">{{ weight|round(1, 'ceil')|number_format(1, '.', ' ') }} кг</td>
+                                </tr>
+                            </table>
+                        </div>
+                    {% endif %}
+
+                    {% if count2 > 0 %}
+                        <h1 class="cart-title">Под запрос (вес {{ weight2|round(1, 'ceil')|number_format(1, '.', ' ') }} кг)</h1>
+
+                        <div class="cart-list">
+                            <table class="table-cart">
+                                <tr class="table-cart-header">
+                                    <td class="cart-name">Название</td>
+                                    <td class="cart-sku">Артикул</td>
+                                    <td class="cart-brand">Производитель</td>
+                                    <td class="cart-weight">Вес, кг</td>
+                                    <td class="cart-quantity">Количество</td>
+                                    {# <td class="cart-stock">Наличие</td> #}
+                                    <td class="cart-delivery">Срок поставки</td>
+                                    <td class="cart-price">Цена за шт.</td>
+                                    <td class="cart-total">Всего</td>
+                                </tr>
+                                {% for productZ in productsPodZapros %}
+                                    <tr class="table-cart-item" data-quantity="{{ productZ.product_quantity }}" data-id="{{ productZ.product_id }}" data-z="1">
+                                        <td>
+                                            <div class="cart-prod-name">
+                                                <div class="del-prod"><a class="product-del" href="#"><img src="/img/delete.png"></a></div>
+                                                <div>{{ productZ.product_name }}</div>
+                                            </div>
+                                        </td>
+                                        <td>{{ productZ.product_sku }}</td>
+                                        <td>{{ productZ.product_brand }}</td>
+                                        <td>{{ productZ.product_weight|number_format(3, '.', ' ') }}</td>
+                                        <td>
+                                            <div class="product-add-cart" data-quantity="{{ productZ.product_quantity }}">
+                                                <div>
+                                                    <div class="product-quantity-block">
+                                                        <a class="product-minus" href="#">-</a>
+                                                        <div>
+                                                            <input type="text" class="product-quantity-input" name="quantity_z[{{ productZ.product_id }}]" value="{{ productZ.cart_quantity }}">
+                                                        </div>
+                                                        <a class="product-plus" href="#">+</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        {# <td>под заказ</td> #}
+                                        <td>под заказ</td>
+                                        <td class="text-right">под заказ</td>
+                                        <td class="text-right">под заказ</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+
+                        <div class="cart-total-block">
+                            <table class="cart-total-bl">
+                                <tr>
+                                    <td class="cart-total-name">Сумма:</td>
+                                    <td class="cart-total-val">под заказ</td>
+                                </tr>
+                                <tr>
+                                    <td class="cart-total-name">Итого:</td>
+                                    <td class="cart-total-val">под заказ</td>
+                                </tr>
+                                <tr>
+                                    <td class="cart-total-name">Общий вес:</td>
+                                    <td class="cart-total-val">{{ weight2|round(1, 'ceil')|number_format(1, '.', ' ') }} кг</td>
+                                </tr>
+                            </table>
+                        </div>
+                    {% endif %}
+
+                    <div class="cart-btn">
+                        <div class="cart-btn-l">
+                            <a href="/" class="cart-btn-a cart-btn-back">Продолжить покупки</a>
+                            <a href="/cart?clear=yes" class="cart-btn-a cart-btn-clear">Очистить корзину</a>
+                            <button type="submit" class="cart-btn-a cart-btn-calc" name="calc">Пересчитать</button>
+                        </div>
+                        <button type="submit" class="cart-btn-a cart-btn-next" name="order">
+                            {% if count > 0 and count2 > 0 %}
+                                Оформить заказ и запрос
+                            {% elseif count > 0 and count2 <= 0 %}
+                                Оформить заказ
+                            {% elseif count <= 0 and count2 > 0 %}
+                                Оформить запрос
+                            {% endif %}
+                        </button>
+                    </div>
+                </form>
+
+            {% else %}
+
+                <h1 class="cart-title">Корзина пустая</h1>
+            
+            {% endif %} 
+
+        {% endif %}  
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Сбросить пароль{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Сбросить пароль</h1>
+
+        <div class="form-change-pass">
+            {# {{ form_start(resetForm) }}
+                {{ form_row(resetForm.plainPassword) }}
+                <button class="btn btn-primary">Сбросить пароль</button>
+            {{ form_end(resetForm) }} #}
+
+            {{ form_start(resetForm) }}
+                <div class="block-form {{ (form_errors(resetForm.plainPassword.first) is empty ? '' : 'form-field-error') }}">
+                    <div class="block-form-v">
+                        <div>{{ form_label(resetForm.plainPassword.first) }}</div>
+                        <div>{{ form_widget(resetForm.plainPassword.first) }}</div>
+                    </div>
+                    <div class="form-error">
+                        {{ form_errors(resetForm.plainPassword.first) }}
+                    </div>
+                </div>
+                    <div class="block-form {{ (form_errors(resetForm.plainPassword.second) is empty ? '' : 'form-field-error') }}">
+                    <div class="block-form-v">
+                        <div>{{ form_label(resetForm.plainPassword.second) }}</div>
+                        <div>{{ form_widget(resetForm.plainPassword.second) }}</div>
+                    </div>
+                    <div class="form-error">
+                        {{ form_errors(resetForm.plainPassword.second) }}
+                    </div>
+                </div>
+                <button class="btn btn-primary">Сбросить пароль</button>
+            {{ form_end(resetForm) }}
+        </div>
+    </div>
+{% endblock %}

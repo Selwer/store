@@ -1,0 +1,227 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Корзина{% endblock %}
+
+{% block breadcrumbs %}
+    {{ include('partions/breadcrumbs.html.twig', 
+        {
+            breadcrumbs: breadcrumbs
+        }) 
+    }}
+{% endblock %}
+
+{% block body %}
+
+    {% set weight = 0 %}
+    {% set summ = 0 %}
+    {% set count = 0 %}
+    {% for product in products %}
+        {% set weight = weight + product.product_weight * (product.cart_quantity > product.product_quantity ? product.product_quantity : product.cart_quantity) %}
+        {% set count = count + 1 %}
+    {% endfor %}
+
+    {% set weight2 = 0 %}
+    {% set count2 = 0 %}
+    {% for productZ in productsPodZapros %}
+        {% set weight2 = weight2 + productZ.product_weight * productZ.cart_quantity %}
+        {% set count2 = count2 + 1 %}
+    {% endfor %}
+
+    <div class="container">
+
+        {% if count > 0 or count2 > 0 %}
+
+            <form method="post" name="cart">
+                <input name="order" type="hidden" value="yes">
+
+                {% if count > 0 %}
+                    <h1 class="cart-title">Оформление заказа (вес {{ weight|round(1, 'ceil')|number_format(1, '.', ' ') }} кг)</h1>
+
+                    <div class="shipping-bl">
+                        <div class="shipping-type-bl">
+                            <div style="margin-right: 10px;">Доставка:</div>
+                            <div style="width: 120px;">
+                                <select name="shipping1" class="shipping-type">
+                                    <option value="pickup">Самовывоз</option>
+                                    <option value="courier">Доставка</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="shipping-address-bl">
+                            <div>Адрес доставки</div>
+                            <div>
+                                <textarea name="address1"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cart-list">
+                        <table class="table-cart">
+                            <tr class="table-cart-header">
+                                <td class="cart-name" style="padding-left: 37px;">Название</td>
+                                <td class="cart-sku">Артикул</td>
+                                <td class="cart-brand">Производитель</td>
+                                <td class="cart-weight">Вес, кг</td>
+                                <td class="cart-quantity">Количество</td>
+                                {# <td class="cart-stock">Наличие</td> #}
+                                <td class="cart-delivery">Срок поставки</td>
+                                <td class="cart-price">Цена за шт.</td>
+                                <td class="cart-total">Всего</td>
+                            </tr>
+                            {% for product in products %}
+                                {% set summ = summ + (product.product_price_user * product.cart_quantity) %}
+                                <tr class="table-cart-item product-id-{{ product.product_id }} {{ (errors[product.product_id] is defined ? ' table-cart-item-error' : '') }}" data-quantity="{{ product.product_quantity }}" data-id="{{ product.product_id }}" data-z="0">
+                                    <td>
+                                        <div>{{ product.product_name }}
+                                            {% if errors[product.product_id] is defined %}
+                                            <div class="cart-error">{{ errors[product.product_id].text }}</div>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                    <td>{{ product.product_sku }}</td>
+                                    <td>{{ product.product_brand }}</td>
+                                    <td>{{ product.product_weight|number_format(3, '.', ' ') }}</td>
+                                    <td>
+                                        <div>{{ product.cart_quantity }}</div>
+                                    </td>
+                                    {# <td>{{ product.product_quantity }}</td> #}
+                                    <td>1-2 дня</td>
+                                    <td class="text-right">{{ product.product_price_user|number_format(2, '.', ' ') }} р.</td>
+                                    <td class="text-right">{{ (product.product_price_user * product.cart_quantity)|number_format(2, '.', ' ') }} р.</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+
+                    <div class="order-total-block">
+                        <div class="order-comment">
+                            <div class="order-comment-bl">
+                                <div>Комментарий к заказу:</div>
+                                <div>
+                                    <textarea name="comment1"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <table class="cart-total-bl">
+                            <tr>
+                                <td class="cart-total-name">Сумма:</td>
+                                <td class="cart-total-val">{{ summ|number_format(2, '.', ' ') }} р.</td>
+                            </tr>
+                            <tr>
+                                <td class="cart-total-name">Итого:</td>
+                                <td class="cart-total-val">{{ summ|number_format(2, '.', ' ') }} р.</td>
+                            </tr>
+                            <tr>
+                                <td class="cart-total-name">Общий вес:</td>
+                                <td class="cart-total-val">{{ weight|round(1, 'ceil')|number_format(1, '.', ' ') }} кг</td>
+                            </tr>
+                        </table>
+                    </div>
+                {% endif %}
+
+                {% if count2 > 0 %}
+                    <h1 class="cart-title">Под запрос (вес {{ weight2|round(1, 'ceil')|number_format(1, '.', ' ') }} кг)</h1>
+
+                    <div class="shipping-bl">
+                        <div class="shipping-type-bl">
+                            <div style="margin-right: 10px;">Доставка:</div>
+                            <div style="width: 120px;">
+                                <select name="shipping2" class="shipping-type">
+                                    <option value="pickup">Самовывоз</option>
+                                    <option value="courier">Доставка</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="shipping-address-bl">
+                            <div>Адрес доставки:</div>
+                            <div>
+                                <textarea name="address2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cart-list">
+                        <table class="table-cart">
+                            <tr class="table-cart-header">
+                                <td class="cart-name">Название</td>
+                                <td class="cart-sku">Артикул</td>
+                                <td class="cart-brand">Производитель</td>
+                                <td class="cart-weight">Вес, кг</td>
+                                <td class="cart-quantity">Количество</td>
+                                {# <td class="cart-stock">Наличие</td> #}
+                                <td class="cart-delivery">Срок поставки</td>
+                                <td class="cart-price">Цена за шт.</td>
+                                <td class="cart-total">Всего</td>
+                            </tr>
+                            {% for productZ in productsPodZapros %}
+                                <tr class="table-cart-item" data-quantity="{{ productZ.product_quantity }}" data-id="{{ productZ.product_id }}" data-z="1">
+                                    <td>
+                                        <div>{{ productZ.product_name }}</div>
+                                    </td>
+                                    <td>{{ productZ.product_sku }}</td>
+                                    <td>{{ productZ.product_brand }}</td>
+                                    <td>{{ productZ.product_weight|number_format(3, '.', ' ') }}</td>
+                                    <td>
+                                        <div>{{ productZ.cart_quantity }}</div>
+                                    </td>
+                                    {# <td>под заказ</td> #}
+                                    <td>под заказ</td>
+                                    <td class="text-right">под заказ</td>
+                                    <td class="text-right">под заказ</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+
+                    <div class="order-total-block">
+                        <div class="order-comment">
+                            <div class="order-comment-bl">
+                                <div>Комментарий к запросу:</div>
+                                <div>
+                                    <textarea name="comment2"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <table class="cart-total-bl">
+                            <tr>
+                                <td class="cart-total-name">Сумма:</td>
+                                <td class="cart-total-val">под заказ</td>
+                            </tr>
+                            <tr>
+                                <td class="cart-total-name">Итого:</td>
+                                <td class="cart-total-val">под заказ</td>
+                            </tr>
+                            <tr>
+                                <td class="cart-total-name">Общий вес:</td>
+                                <td class="cart-total-val">{{ weight2|round(1, 'ceil')|number_format(1, '.', ' ') }} кг</td>
+                            </tr>
+                        </table>
+                    </div>
+                {% endif %}
+
+                <div class="cart-btn">
+                    <div class="cart-btn-l">
+                    </div>
+                    <button type="submit" class="cart-btn-a cart-btn-next" name="order-submit">
+                        {% if count > 0 and count2 > 0 %}
+                            Оформить заказ и запрос
+                        {% elseif count > 0 and count2 <= 0 %}
+                            Оформить заказ
+                        {% elseif count <= 0 and count2 > 0 %}
+                            Оформить запрос
+                        {% endif %}
+                    </button>
+                </div>
+            </form>
+
+        {% else %}
+
+            <h1 class="cart-title">Нет товаров для оформления</h1>
+        
+        {% endif %}   
+
+    </div>
+
+{% endblock %}

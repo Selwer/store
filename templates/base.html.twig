@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=1310">
+        <title>{% block title %}ИМ Грузовиков{% endblock %}</title>
+        <link rel="shortcut icon" href="/favicon.ico">
+        <link rel="apple-touch-icon" href="/favicon.ico">
+        <link href="{{ asset('css/sanitize.css') }}" type="text/css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css" integrity="sha512-aD9ophpFQ61nFZP6hXYu4Q/b/USW7rpLCQLX6Bi0WJHXNO7Js/fUENpBQf/+P4NtpzNX0jSgR5zVvPOJp+W2Kg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.3.3/dist/jBox.all.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" integrity="sha512-17EgCFERpgZKcm0j0fEq1YCJuyAWdz9KUtv1EjVuaOz8pDnh/0nZxmU6BBXwaaxqoi9PQXnRWqlcDB027hgv9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link href="{{ asset('css/style.css') }}" type="text/css" rel="stylesheet" />
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+
+        <header class="header">
+            <div class="container">
+                <div class="header-top">
+                    <div class="logo"><a href="/"><img src="/img/logo.png"></a></div>
+                    <div class="place"><span>Москва</span></div>
+                    <div class="header-phone-bl">
+                        <div class="header-phone">+7 (495) 153-53-66</div>
+                        <div class="header-phone-t">Круглосуточно</div>
+                    </div>
+                    <div>
+                        {% if app.user %}
+                            {% set nameProfile = '' %}
+                            {% if app.user.typeuser == 'fiz' %}
+                                {% set nameProfile = app.user.lastname ~ ' ' ~ app.user.firstname|first ~ '.' %}
+                            {% else %}
+                                {% set nameProfile = app.user.opfname %}
+                            {% endif %}
+                            <a class="btn btn-blue btn-profile-header" href="{{ path('profile') }}">{{ nameProfile }}</a>
+                        {% else %}
+                            <a class="btn btn-blue btn-login-header btn-profile-header" href="#">Личный кабинет</a>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <a class="btn btn-orange btn-cart-header" href="{{ path('cart') }}">Корзина <span class="cart-count"></span></a>
+                    </div>
+                </div>
+            </div>
+            <nav class="nav-head">
+                <div class="container">
+                    <ul>
+                        <li><a class="icon-h ic-tire" href="/catalog/tires">Шины</a></li>
+                        <li><a class="icon-h ic-gear" href="/catalog/parts">Запасные части</a></li>
+                        <li><a class="icon-h ic-elev" href="/catalog/forks">Вилы</a></li>
+                        <li><a class="icon-h ic-battery" href="/catalog/acb">АКБ</a></li>
+                        <li><a class="icon-h ic-wheel" href="/catalog/wheels">Диски и колеса</a></li>
+                        <li><a class="icon-h ic-service" href="/service">Сервис</a></li>
+                        <li><a class="icon-h ic-delivery" href="/shipping">Доставка</a></li>
+                        <li><a class="icon-h ic-contacts" href="/contacts">Контакты</a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="search-block">
+                <div class="container">
+                    <div class="search-bl">
+                        <div class="search search-bl-f">
+                            <form method="get" action="{{ path('search1') }}">
+                                <div class="search-form">
+                                    <div class="search-input">
+                                        <input name="s1" placeholder="Введите размер шины" value="{{ app.request.get('s1') }}">
+                                    </div>
+                                    <div class="search-btn search-btn1">
+                                        <button type="button" class="btn-b search-btn">Найти</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="search-example">
+                                <div class="search-example-text2">
+                                    Примеры:          
+                                </div>
+                                <div class="search-example-text">9524</div>
+                                <div class="search-example-text">2310</div>
+                            </div>
+                        </div>
+                        <div class="search search-bl-f">
+                            <form method="get" action="{{ path('search2') }}">
+                                <div class="search-form">
+                                    <div class="search-input">
+                                        <input name="s2" placeholder="Введите название запчасти (часть названия), артикул" value="{{ app.request.get('s2') }}">
+                                    </div>
+                                    <div class="search-btn search-btn2">
+                                        <button type="button" class="btn-b search-btn">Найти</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="search-example">
+                                <div class="search-example-text2">
+                                    Примеры:          
+                                </div>
+                                <div class="search-example-text">11ASS351</div>
+                                <div class="search-example-text">Термостат</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="content">
+            {% block breadcrumbs %}{% endblock %}
+            {% block body %}{% endblock %}
+        </main>
+        
+        <footer class="footer">
+            <nav class="nav-footer">
+                <div class="container">
+                    <div class="footer-cont">
+                        <div>
+                            <ul>
+                                <li><a href="/catalog/tires">Шины</a></li>
+                                <li><a href="/catalog/parts">Запасные части</a></li>
+                                <li><a href="/catalog/forks">Вилы</a></li>
+                                <li><a href="/catalog/acb">АКБ</a></li>
+                                <li><a href="/catalog/wheels">Диски и колеса</a></li>
+                                <li><a href="/service">Сервис</a></li>
+                                <li><a href="/shipping">Доставка</a></li>
+                                <li><a href="/contacts">Контакты</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="footer-phone">+7 (495) 153-53-66</div>
+                            <div class="footer-phone-t"><a href="/contacts#contact_form">Заказать звонок</a></div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </footer>
+    
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.3.3/dist/jBox.all.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.full.min.js" integrity="sha512-PZUUFofP00wI366Au6XSNyN4Zg8M8Kma4JKIG7ywt8FEY1+Ur0H+FAlH6o0fKoCrdmM4+ZzMyW30msp8Z2zDaA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/i18n/ru.min.js" integrity="sha512-+PHfUU7g/dESFpIWuN1M6h5jeREW3cp2iJrFl2IVmFHPuv07QRaTZo3Lmd+Q5drsm1qujfztAEv2YVJFdsY36w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="{{ asset('js/jquery.inputmask.min.js') }}"></script>
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        {% block javascripts %}
+            {#{{ encore_entry_script_tags('app') }}#}
+        {% endblock %}
+        <script src="{{ asset('js/main.js') }}"></script>
+    </body>
+</html>

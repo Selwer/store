@@ -1,0 +1,469 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Результаты поиска{% endblock %}
+
+{% block breadcrumbs %}
+    {{ include('partions/breadcrumbs.html.twig', 
+        {
+            breadcrumbs: breadcrumbs
+        }) 
+    }}
+{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+
+        <div class="search-fast-filter-bl">
+            <div class="search-fast-filter">
+                <div class="search-fast-filter-title">Фильтр:</div>
+                <div class="search-fast-filter-list">
+                    {% if filter['Шины'] is defined and filter['Шины']|length > 0 %}
+                        {% for filter_item, count in filter['Шины'] %}
+                            {% set linkFilter = link ~ '&t=ti:' ~ filter_item %}
+                            {% if filterAppl %}
+                                {% set linkFilter = linkBack %}
+                            {% endif %}
+                            <a class="search-fast-filter-item{{ (filterAppl ? ' active' : '') }}" href="{{ linkFilter }}">{{ filter_item }} ({{ count }})</a>
+                        {% endfor %}
+                    {% endif %}
+                    {% if filter['Вилы'] is defined and filter['Вилы']|length > 0 %}
+                        {% for filter_item, count in filter['Вилы'] %}
+                            {% set linkFilter = link ~ '&t=fo:' ~ filter_item %}
+                            {% if filterAppl %}
+                                {% set linkFilter = linkBack %}
+                            {% endif %}
+                            <a class="search-fast-filter-item{{ (filterAppl ? ' active' : '') }}" href="{{ linkFilter }}">{{ filter_item }} ({{ count }})</a>
+                        {% endfor %}
+                    {% endif %}
+                    {% if filter['АКБ'] is defined and filter['АКБ']|length > 0 %}
+                        {% for filter_item, count in filter['АКБ'] %}
+                            {% set linkFilter = link ~ '&t=ac:' ~ filter_item %}
+                            {% if filterAppl %}
+                                {% set linkFilter = linkBack %}
+                            {% endif %}
+                            <a class="search-fast-filter-item{{ (filterAppl ? ' active' : '') }}" href="{{ linkFilter }}">{{ filter_item }} ({{ count }})</a>
+                        {% endfor %}
+                    {% endif %}
+                    {% if filter['Запчасти'] is defined and filter['Запчасти']|length > 0 %}
+                        {% for filter_item, count in filter['Запчасти'] %}
+                            {% set linkFilter = link ~ '&t=pa:' ~ filter_item %}
+                            {% if filterAppl %}
+                                {% set linkFilter = linkBack %}
+                            {% endif %}
+                            <a class="search-fast-filter-item{{ (filterAppl ? ' active' : '') }}" href="{{ linkFilter }}">{{ filter_item }} ({{ count }})</a>
+                        {% endfor %}
+                    {% endif %}
+                    {% if filter['Диски и колеса'] is defined and filter['Диски и колеса']|length > 0 %}
+                        {% for filter_item, count in filter['Диски и колеса'] %}
+                            {% set linkFilter = link ~ '&t=wh:' ~ filter_item %}
+                            {% if filterAppl %}
+                                {% set linkFilter = linkBack %}
+                            {% endif %}
+                            <a class="search-fast-filter-item{{ (filterAppl ? ' active' : '') }}" href="{{ linkFilter }}">{{ filter_item }} ({{ count }})</a>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {% if products['Шины'] is defined and products['Шины']|length > 0 %}
+            <div class="search-title">Шины</div>
+            <div class="search-products">
+                <table class="catalog-table-list">
+                    <tr class="product-cell-sort">
+                        <td><a href="#" class="sorting">Артикул</a></td>
+                        <td><a href="#" class="sorting">Категория</a></td>
+                        <td><a href="#" class="sorting">Производитель</a></td>
+                        <td><a href="#" class="sorting">Типоразмер</a></td>
+                        <td><a href="#" class="sorting">Радиальная/Диагональная</a></td>
+                        <td><a href="#" class="sorting">Диаметр</a></td>
+                        <td><a href="#" class="sorting">Модель/<br>Протектор</a></td>
+                        <td><a href="#" class="sorting">Слойность</a></td>
+                        <td><a href="#" class="sorting">Исполнение</a></td>
+                        <td><a href="#" class="sorting">Обод</a></td>
+                        <td><a href="#" class="sorting">Вес</a></td>
+                        <td><a href="#" class="sorting">Объем</a></td>
+                        <td><a href="#" class="sorting">Складской<br>остаток</a></td>
+                        <td></td>
+                        <td><a href="#" class="sorting">Цена<br>розничная</a></td>
+                        <td><a href="#" class="sorting">Цена<br>дилерская</a></td>
+                    </tr>
+                    <tr style="height: 15px;"><td></td></tr>
+                    {% for product in products['Шины'] %}
+                        <tr class="product-item {{ loop.index is odd ? ' odd' : ' even' }}">
+                            <td><a href="/product-{{ product.id }}">{{ product.sku }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.tire_category }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.brand }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.tire_size }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.tire_type }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.tire_diameter }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.tire_model }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.tire_layer }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.tire_execut }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.tire_rim }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.weight|round(4, 'ceil') }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.volume|round(4, 'ceil') }}</a></td>
+                            <td>
+                                {% if isCertified %}
+                                    {% if product.quantity >= 12 %}
+                                        {% set quantityText = 'много' %}
+                                        {% set quantityClass = '' %}
+                                    {% elseif product.quantity == 0 %}
+                                        {% set quantityText = 'под заказ' %}
+                                        {% set quantityClass = 'indicator0' %}
+                                    {% else %}
+                                        {% set quantityText = 'мало' %}
+                                        {% set quantityClass = 'indicator-l' %}
+                                    {% endif %}
+                                    <div class="indicator {{ quantityClass }}">
+                                        <div class="indicator-lo"></div>
+                                        <div class="indicator-lo"></div>
+                                        <div class="indicator-lo indicator-li"></div>
+                                        <div class="indicator-lo indicator-li"></div>
+                                    </div>
+                                    <div><a href="/product-{{ product.id }}">{{ quantityText }}</a></div>
+                                {% else %}
+                                    <div class="green-t">в наличии</div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if isCertified %}
+                                    <button class="btn-addcart btn-addcart-v2" type="button" 
+                                        data-guid="{{ product.id }}"
+                                        data-name="{{ product.name }}"></button>
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
+                                {% if isCertified and product.quantity > 0 %}
+                                    <a href="/product-{{ product.id }}">{{ product.price|number_format(0, '.', ' ') }}</a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
+                                {% if isCertified and product.quantity > 0 %}
+                                    <a href="/product-{{ product.id }}">{{ product.price_user|number_format(0, '.', ' ') }}</a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+
+        {% if products['Вилы'] is defined and products['Вилы']|length > 0 %}
+            <div class="search-title">Вилы</div>
+            <div class="search-products">
+                <table class="catalog-table-list">
+                    <tr class="product-cell-sort">
+                        <td><a href="#" class="sorting">Артикул</a></td>
+                        <td><a href="#" class="sorting">Наименование</a></td>
+                        <td><a href="#" class="sorting">Производитель</a></td>
+                        <td><a href="#" class="sorting">Длина</a></td>
+                        <td><a href="#" class="sorting">Сечение</a></td>
+                        <td><a href="#" class="sorting">Класс</a></td>
+                        <td><a href="#" class="sorting">Грузоподъемность/пара</a></td>
+                        <td><a href="#" class="sorting">Складской<br>остаток</a></td>
+                        <td></td>
+                        <td><a href="#" class="sorting">Цена<br>розничная</a></td>
+                        <td><a href="#" class="sorting">Цена<br>дилерская</a></td>
+                    </tr>
+                    <tr style="height: 15px;"><td></td></tr>
+                    {% for product in products['Вилы'] %}
+                        <tr class="product-item {{ loop.index is odd ? ' odd' : ' even' }}">
+                            <td><a href="/product-{{ product.id }}">{{ product.sku }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.name }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.brand }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.fork_length }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.fork_section }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.fork_class }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.fork_load }}</a></td>
+                            <td>
+                                {% if isCertified %}
+                                    {% if product.quantity >= 12 %}
+                                        {% set quantityText = 'много' %}
+                                        {% set quantityClass = '' %}
+                                    {% elseif product.quantity == 0 %}
+                                        {% set quantityText = 'под заказ' %}
+                                        {% set quantityClass = 'indicator0' %}
+                                    {% else %}
+                                        {% set quantityText = 'мало' %}
+                                        {% set quantityClass = 'indicator-l' %}
+                                    {% endif %}
+                                    <div class="indicator {{ quantityClass }}">
+                                        <div class="indicator-lo"></div>
+                                        <div class="indicator-lo"></div>
+                                        <div class="indicator-lo indicator-li"></div>
+                                        <div class="indicator-lo indicator-li"></div>
+                                    </div>
+                                    <div><a href="/product-{{ product.id }}">{{ quantityText }}</a></div>
+                                {% else %}
+                                    <div class="green-t">в наличии</div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if isCertified %}
+                                    <button class="btn-addcart btn-addcart-v2" type="button" 
+                                        data-guid="{{ product.id }}"
+                                        data-name="{{ product.name }}"></button>
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
+                                {% if isCertified and product.quantity > 0 %}
+                                    <a href="/product-{{ product.id }}">{{ product.price|number_format(0, '.', ' ') }}</a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
+                                {% if isCertified and product.quantity > 0 %}
+                                    <a href="/product-{{ product.id }}">{{ product.price_user|number_format(0, '.', ' ') }}</a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+
+        {% if products['АКБ'] is defined and products['АКБ']|length > 0 %}
+            <div class="search-title">АКБ</div>
+            <div class="search-products">
+                <table class="catalog-table-list">
+                    <tr class="product-cell-sort">
+                        <td><a href="#" class="sorting">Артикул</a></td>
+                        <td><a href="#" class="sorting">Наименование</a></td>
+                        <td><a href="#" class="sorting">Производитель</a></td>
+                        <td><a href="#" class="sorting">Размер</a></td>
+                        <td><a href="#" class="sorting">Технология</a></td>
+                        <td><a href="#" class="sorting">Тип</a></td>
+                        <td><a href="#" class="sorting">Серия</a></td>
+                        <td><a href="#" class="sorting">Модель</a></td>
+                        <td><a href="#" class="sorting">Складской<br>остаток</a></td>
+                        <td></td>
+                        <td><a href="#" class="sorting">Цена<br>розничная</a></td>
+                        <td><a href="#" class="sorting">Цена<br>дилерская</a></td>
+                    </tr>
+                    <tr style="height: 10px;"><td></td></tr>
+                    {% for product in products['АКБ'] %}
+                        <tr class="product-item {{ loop.index is odd ? ' odd' : ' even' }}">
+                            <td><a href="/product-{{ product.id }}">{{ product.sku }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.name }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.brand }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.acb_size }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.acb_tech }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.acb_type }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.acb_seria }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.acb_model }}</a></td>
+                            <td>
+                                {% if isCertified %}
+                                    {% if product.quantity >= 12 %}
+                                        {% set quantityText = 'много' %}
+                                        {% set quantityClass = '' %}
+                                    {% elseif product.quantity == 0 %}
+                                        {% set quantityText = 'под заказ' %}
+                                        {% set quantityClass = 'indicator0' %}
+                                    {% else %}
+                                        {% set quantityText = 'мало' %}
+                                        {% set quantityClass = 'indicator-l' %}
+                                    {% endif %}
+                                    <div class="indicator {{ quantityClass }}">
+                                        <div class="indicator-lo"></div>
+                                        <div class="indicator-lo"></div>
+                                        <div class="indicator-lo indicator-li"></div>
+                                        <div class="indicator-lo indicator-li"></div>
+                                    </div>
+                                    <div><a href="/product-{{ product.id }}">{{ quantityText }}</a></div>
+                                {% else %}
+                                    <div class="green-t">в наличии</div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if isCertified %}
+                                    <button class="btn-addcart btn-addcart-v2" type="button" 
+                                        data-guid="{{ product.id }}"
+                                        data-name="{{ product.name }}"></button>
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
+                                {% if isCertified and product.quantity > 0 %}
+                                    <a href="/product-{{ product.id }}">{{ product.price|number_format(0, '.', ' ') }}</a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
+                                {% if isCertified and product.quantity > 0 %}
+                                    <a href="/product-{{ product.id }}">{{ product.price_user|number_format(0, '.', ' ') }}</a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+
+        {% if products['Запчасти'] is defined and products['Запчасти']|length > 0 %}
+            <div class="search-title">Запчасти</div>
+            <div class="search-products">
+                <table class="catalog-table-list">
+                    <tr class="product-cell-sort">
+                        <td><a href="#" class="sorting">Артикул</a></td>
+                        <td><a href="#" class="sorting">Наименование</a></td>
+                        <td><a href="#" class="sorting">Производитель</a></td>
+                        <td><a href="#" class="sorting">Складской<br>остаток</a></td>
+                        <td></td>
+                        <td><a href="#" class="sorting">Цена<br>розничная</a></td>
+                        <td><a href="#" class="sorting">Цена<br>дилерская</a></td>
+                    </tr>
+                    <tr style="height: 10px;"><td></td></tr>
+                    {% for product in products['Запчасти'] %}
+                        <tr class="product-item {{ loop.index is odd ? ' odd' : ' even' }}">
+                            <td><a href="/product-{{ product.id }}">{{ product.sku }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.name }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.brand }}</a></td>
+                            <td>
+                                {% if isCertified %}
+                                    {% if product.quantity >= 12 %}
+                                        {% set quantityText = 'много' %}
+                                        {% set quantityClass = '' %}
+                                    {% elseif product.quantity == 0 %}
+                                        {% set quantityText = 'под заказ' %}
+                                        {% set quantityClass = 'indicator0' %}
+                                    {% else %}
+                                        {% set quantityText = 'мало' %}
+                                        {% set quantityClass = 'indicator-l' %}
+                                    {% endif %}
+                                    <div class="indicator {{ quantityClass }}">
+                                        <div class="indicator-lo"></div>
+                                        <div class="indicator-lo"></div>
+                                        <div class="indicator-lo indicator-li"></div>
+                                        <div class="indicator-lo indicator-li"></div>
+                                    </div>
+                                    <div><a href="/product-{{ product.id }}">{{ quantityText }}</a></div>
+                                {% else %}
+                                    <div class="green-t">в наличии</div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if isCertified %}
+                                    <button class="btn-addcart btn-addcart-v2" type="button" 
+                                        data-guid="{{ product.id }}"
+                                        data-name="{{ product.name }}"></button>
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
+                                {% if isCertified and product.quantity > 0 %}
+                                    <a href="/product-{{ product.id }}">{{ product.price|number_format(0, '.', ' ') }}</a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
+                                {% if isCertified and product.quantity > 0 %}
+                                    <a href="/product-{{ product.id }}">{{ product.price_user|number_format(0, '.', ' ') }}</a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+
+        {% if products['Диски и колеса'] is defined and products['Диски и колеса']|length > 0 %}
+            <div class="search-title">Диски и колеса</div>
+            <div class="search-products">
+                <table class="catalog-table-list">
+                    <tr class="product-cell-sort">
+                        <td><a href="#" class="sorting">Артикул</a></td>
+                        <td><a href="#" class="sorting">Производитель</a></td>
+                        <td><a href="#" class="sorting">Типоразмер</a></td>
+                        <td><a href="#" class="sorting">Радиальная/Диагональная</a></td>
+                        <td><a href="#" class="sorting">Диаметр</a></td>
+                        <td><a href="#" class="sorting">Модель/<br>Протектор</a></td>
+                        <td><a href="#" class="sorting">Слойность</a></td>
+                        <td><a href="#" class="sorting">Исполнение</a></td>
+                        <td><a href="#" class="sorting">Обод</a></td>
+                        <td><a href="#" class="sorting">Вес</a></td>
+                        <td><a href="#" class="sorting">Объем</a></td>
+                        <td><a class="sorting" href="#">Складской<br>остаток</a></td>
+                        <td></td>
+                        <td><a href="#" class="sorting">Цена<br>розничная</a></td>
+                        <td><a href="#" class="sorting">Цена<br>дилерская</a></td>
+                    </tr>
+                    <tr style="height: 10px;"><td></td></tr>
+                    {% for product in products['Диски и колеса'] %}
+                        <tr class="product-item {{ loop.index is odd ? ' odd' : ' even' }}">
+                            <td><a href="/product-{{ product.id }}">{{ product.sku }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.brand }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.tire_size }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.tire_type }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.tire_diameter }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.tire_model }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.tire_layer }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.tire_execut }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.tire_rim }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.weight|round(4, 'ceil') }}</a></td>
+                            <td><a href="/product-{{ product.id }}">{{ product.volume|round(4, 'ceil') }}</a></td>
+                            <td>
+                                {% if isCertified %}
+                                    {% if product.quantity >= 12 %}
+                                        {% set quantityText = 'много' %}
+                                        {% set quantityClass = '' %}
+                                    {% elseif product.quantity == 0 %}
+                                        {% set quantityText = 'под заказ' %}
+                                        {% set quantityClass = 'indicator0' %}
+                                    {% else %}
+                                        {% set quantityText = 'мало' %}
+                                        {% set quantityClass = 'indicator-l' %}
+                                    {% endif %}
+                                    <div class="indicator {{ quantityClass }}">
+                                        <div class="indicator-lo"></div>
+                                        <div class="indicator-lo"></div>
+                                        <div class="indicator-lo indicator-li"></div>
+                                        <div class="indicator-lo indicator-li"></div>
+                                    </div>
+                                    <div><a href="/product-{{ product.id }}">{{ quantityText }}</a></div>
+                                {% else %}
+                                    <div class="green-t">в наличии</div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if isCertified %}
+                                    <button class="btn-addcart btn-addcart-v2" type="button" 
+                                        data-guid="{{ product.id }}"
+                                        data-name="{{ product.name }}"></button>
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
+                                {% if isCertified and product.quantity > 0 %}
+                                    <a href="/product-{{ product.id }}">{{ product.price|number_format(0, '.', ' ') }}</a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
+                                {% if isCertified and product.quantity > 0 %}
+                                    <a href="/product-{{ product.id }}">{{ product.price_user|number_format(0, '.', ' ') }}</a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+        
+    </div>
+
+{% endblock %}

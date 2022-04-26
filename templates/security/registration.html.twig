@@ -1,0 +1,195 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block breadcrumbs %}
+    {{ include('partions/breadcrumbs.html.twig', 
+        {
+            breadcrumbs: breadcrumbs
+        }) 
+    }}
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    <div class="title2" style="margin-bottom: 5px;">Регистрация</div>
+
+    <div style="margin-bottom: 25px;">Если Вы уже зарегистрированы, перейдите на страницу авторизации.</div>
+
+    <div class="registration-form">
+        <form method="post">
+            
+            <div class="alert alert-danger errors-block"></div>
+
+            {% if app.user %}
+                <div class="mb-3">
+                    You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                </div>
+            {% endif %}
+
+            <div class="block-steps">
+                <div class="step step1 active"><div class="alarm">1</div></div>
+                <div class="step step2"><div class="alarm">2</div></div>
+                {# <div class="step step3"><div class="alarm">3</div></div> #}
+            </div>
+            <div class="block-steps-text">
+                <div class="step-text step1 active">Шаг 1. Заполните форму</div>
+                <div class="step-text step2">Шаг 2. Подтвердите Email</div>
+                {# <div class="step-text step3">Шаг 3. Подтвердите телефон</div> #}
+            </div>
+        
+            <div style="height: 40px;"></div>
+
+            <div class="block-reg-step1">
+                <div class="reg-title-r">Основные данные</div>
+
+                <div class="choose-type">
+                    <div class="type-reg type-ur1 active" data-typereg="ur1">
+                        <span>Юридическое лицо</span>
+                    </div>
+                    <div class="type-reg type-ur2" data-typereg="ur2">
+                        <span>ИП</span>
+                    </div>
+                    <div class="type-reg type-fiz" data-typereg="fiz">
+                        <span>Частное лицо</span>
+                    </div>
+                </div>
+
+                <div class="fields-block fields-registration">
+                    <div class="field-cont">
+                        <div class="field-label">Имя <span class="req">*</span></div>
+                        <div class="field"><input type="text" value="" name="first_name" id="first_name" placeholder="Имя">
+                            <div class="error-text"></div>
+                        </div>
+                    </div>
+                    <div class="field-cont">
+                        <div class="field-label">Фамилия <span class="req">*</span></div>
+                        <div class="field"><input type="text" value="" name="last_name" id="last_name" placeholder="Фамилия">
+                            <div class="error-text"></div>
+                        </div>
+                    </div>
+                    <div class="field-cont">
+                        <div class="field-label">Отчество</div>
+                        <div class="field"><input type="text" value="" name="patronymic_name" id="patronymic_name" placeholder="Отчество"></div>
+                    </div>
+                    <div class="field-cont">
+                        <div class="field-label">Email <span class="req">*</span></div>
+                        <div class="field"><input type="email" value="" name="email" id="email" placeholder="Email">
+                            <div class="error-text"></div>
+                        </div>
+                    </div>
+                    <div class="field-cont">
+                        <div class="field-label">Мобильный<br> телефон <span class="req">*</span></div>
+                        <div class="field"><input class="mobile_phone" type="text" value="" name="mobile_phone" id="mobile_phone" placeholder="Мобильный телефон">
+                            <div class="error-text"></div>
+                        </div>
+                    </div>
+                    <div class="field-cont field-cont-inn">
+                        <div class="field-label">ИНН <span class="req">*</span></div>
+                        <div class="field"><input type="text" value="" name="inn" id="inn" placeholder="ИНН">
+                            <div class="error-text"></div>
+                        </div>
+                    </div>
+                    <div class="field-cont field-cont-kpp">
+                        <div class="field-label">КПП <span class="req">*</span></div>
+                        <div class="field"><input type="text" value="" name="kpp" id="kpp" placeholder="КПП">
+                            <div class="error-text"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reg-title-r">Ваш пароль</div>
+
+                <div class="fields-block fields-registration">
+                    <div class="field-cont">
+                        <div class="field-label">Пароль <span class="req">*</span></div>
+                        <div class="field"><input type="password" value="" name="password" id="password" placeholder="Пароль">
+                            <div class="error-text"></div>
+                        </div>
+                    </div>
+                    <div class="field-cont">
+                        <div class="field-label">Подтверждение пароля <span class="req">*</span></div>
+                        <div class="field"><input type="password" value="" name="password_repeat" id="password_repeat" placeholder="Подтверждение пароля">
+                            <div class="error-text"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field-btn-agree">
+                    <div class="agree-bl field-cont">
+                        <input class="field-agree field" type="checkbox" id="agree" value="agree" checked="">
+                        <label class="" for="agree">Я даю <a class="agree-pdf" href="#">согласие</a> на обработку персональных данных</label>
+                        <div class="error-text"></div>
+                    </div>
+                    <div>
+                        <button class="btn btn-blue btn-reg btn-reg-step1" type="button">
+                            Продолжить
+                        </button>
+                    </div>
+                </div>
+
+                <div id="reg-form-modal">
+                    <div>Подтвердите информацию по юр.лицу:</div>
+                    <div id="opfname"></div>
+                    <div class="btn-block-modal">
+                        <button class="btn btn-grey btn-reg-step1-opfname-cancel">Отмена</button>
+                        <button class="btn btn-blue btn-reg-step1-opfname-ok">Подтвердить</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="block-reg-step2">
+                <div class="fields-block fields-registration">
+                    <div class="text-reg">
+                        <div style="margin-bottom: 16px;">На Вашу электронную почту <b id="confirm-email-code">example@example.com</b>, 
+                        указанную при регистрации был отправлен код, введите его для подтверждения.
+                            <span class="repeat-sendemail">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="field-cont">
+                        <div class="field-label">Введите код <span class="req">*</span></div>
+                        <div class="field"><input id="input-emailcode" type="text" name="emailcode" value="">
+                            <div class="error-text"></div>
+                        </div>
+                    </div>
+                    <div class="btn-block-r">
+                        <button class="btn btn-blue btn-reg btn-reg-step2" type="button">
+                            Продолжить
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {# <div class="block-reg-step3">
+                <div class="fields-block fields-registration">
+                    <div class="text-reg">
+                        <div style="margin-bottom: 16px;">На Ваш мобильный телефон <b id="confirm-phone-code">+7 (000) 000-00-00</b>, 
+                        указанный при регистрации было отправлено sms сообщение с кодом, введите его для подтверждения.
+                            <span class="repeat-sendphone">  
+                            </span>
+                        </div>
+                    </div>
+                    <div class="field-cont">
+                        <div class="field-label">Введите код <span class="req">*</span></div>
+                        <div class="field"><input id="input-phonecode" type="text" name="phonecode" value="">
+                            <div class="error-text"></div>
+                        </div>
+                    </div>
+                    <div class="btn-block-r">
+                        <button class="btn btn-blue btn-reg btn-reg-step3" type="button">
+                            Продолжить
+                        </button>
+                    </div>
+                </div>
+            </div> #}
+
+            <input class="ces_registr" type="hidden" name="_ces_" value="{{ csrf_token('registration') }}">
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}

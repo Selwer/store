@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Вам отправлено письмо для сброса пароля{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <p>
+            Если учетная запись, соответствующая вашей электронной почте, существует, то только что было 
+            отправлено электронное письмо, содержащее ссылку, которую Вы можете использовать для сброса пароля.
+            Ссылка будет действительна 1 час.
+            {# {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }} #}
+        </p>
+        <p>Если вы не получили электронное письмо, пожалуйста, проверьте папку со спамом или <a href="{{ path('app_forgot_password_request') }}">повторите попытку</a>.</p>
+    </div>
+{% endblock %}

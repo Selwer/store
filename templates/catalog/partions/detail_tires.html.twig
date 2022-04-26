@@ -1,0 +1,26 @@
+<div class="product-detail-ch-lbl">
+    <div>Производитель</div>
+    <div>Вес</div>
+    <div>Объем</div>
+    <div>Категория</div>
+    <div>Типоразмер</div>
+    <div>Радиальная/Диагональная</div>
+    <div>Диаметр</div>
+    <div>Модель/Протектор</div>
+    <div>Слойность</div>
+    <div>Исполнение</div>
+    <div>Рекомендованный обод</div>
+</div>
+<div class="product-detail-ch-val">
+    <div>{{ product.brand }}</div>
+    <div>{{ product.weight|number_format(3, '.', ' ') }}</div>
+    <div>{{ product.volume|number_format(3, '.', ' ') }}</div>
+    <div>{{ product.tire_category }}</div>
+    <div>{{ product.tire_size }}</div>
+    <div>{{ product.tire_type }}</div>
+    <div>{{ product.tire_diameter }}</div>
+    <div>{{ product.tire_model }}</div>
+    <div>{{ product.tire_layer }}</div>
+    <div>{{ product.tire_execut }}</div>
+    <div>{{ product.tire_rim }}</div>
+</div>

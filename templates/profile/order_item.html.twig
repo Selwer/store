@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Мой аккаунт - Заказы{% endblock %}
+
+{% block breadcrumbs %}
+    {{ include('partions/breadcrumbs.html.twig', 
+        {
+            breadcrumbs: breadcrumbs
+        }) 
+    }}
+{% endblock %}
+
+{% block body %}
+    
+    <div class="container">
+
+        <div class="back-link"><a href="{{ path('profile_orders') }}">Вернуться назад</a></div>
+
+        {% if error is defined %}
+
+            <div class="alert alert-danger" role="alert">Ошибка получения данных! Попробуйие позже.</div>
+
+        {% else %}
+            {% set totalWeight = 0 %}
+
+            <div class="title2 order-item-head">Заказ {{ order.guid }}</div>
+            <div class="order-item-info">
+                <div><span class="bold">Дата:</span> {{ order.date }}</div>
+                <div><span class="bold">Статус:</span> {{ status }}</div>
+                {% set typeShipping = 'Самовывоз' %}
+                {% if info.typeShipping == 'courier' %}
+                    {% set typeShipping = 'Доставка' %}
+                {% endif %}
+                <div><span class="bold">Способ доставки:</span> {{ typeShipping }}</div>
+                {% if info.typeShipping == 'courier' %}
+                    <div><span class="bold">Адрес доставки:</span> {{ info.address }}</div>
+                {% endif %}
+            </div>
+
+            <div class="parts-order-bl">
+                <table class="parts-order">
+                    <tr class="parts-order-head">
+                        <td class="p-h-sku">Артикул</td>
+                        <td class="p-h-brand">Производитель</td>
+                        <td class="p-h-quant">Количество</td>
+                        <td class="p-h-price">Вес, кг</td>
+                        <td class="p-h-price">Цена</td>
+                        <td class="p-h-summ">Сумма</td>
+                        <td class="p-h-status">Статус</td>
+                    <tr>
+                    <tr style="height: 10px;"><td></td></tr>
+                    {% for part in parts %}
+                    {% set totalWeight = totalWeight + (part.partWeight * part.partQuantity) %}
+                    <tr class="parts-order-item">
+                        <td>{{ part.vendorCode }}</td>
+                        <td>{{ part.brand }}</td>
+                        <td class="p-i-quant">{{ part.partQuantity }}</td>
+                        <td>{{ (part.partWeight * part.partQuantity)|round(4, 'ceil') }}</td>
+                        <td>{{ part.partPrice|number_format(2, '.', ' ') }}</td>
+                        <td>{{ part.partSum|number_format(2, '.', ' ') }}</td>
+                        <td>{{ part.partStatus }}</td>
+                    <tr>
+                    {% endfor %}
+                    {# {% if summ > 0 %} #}
+                    <tr>
+                        <td class="hr" colspan="7"></td>
+                    </tr>
+                    <tr class="order-total-inf">
+                        <td colspan="3"></td>
+                        <td colspan="3" class="order-total-inf-td">Общая сумма заказа:</td>
+                        <td>{{ (summ > 0 ? summ|number_format(2, '.', ' ') ~ 'р.' : 'Под запрос') }}</td>
+                    </tr>
+                    <tr class="order-total-inf">
+                        <td colspan="3"></td>
+                        <td colspan="3" class="order-total-inf-td">Общий вес:</td>
+                        <td>{{ totalWeight|round(4, 'ceil') }}кг</td>
+                    </tr>
+                    {# {% endif %} #}
+                </table>
+                {# {% if files is not empty %} #}
+                <div class="order-pdf-files">
+                    <div class="order-pdf-files-title">Документы по заказу</div>
+                    {% if files is not empty %}
+                    <div><a href="#">Скачать файл</a></div>
+                    {% endif %}
+                </div>
+                {# {% endif %} #}
+            </div>
+
+        {% endif %}
+
+    </div>
+
+{% endblock %}

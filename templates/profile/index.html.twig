@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Мой аккаунт{% endblock %}
+
+{% block breadcrumbs %}
+    {{ include('partions/breadcrumbs.html.twig', 
+        {
+            breadcrumbs: breadcrumbs
+        }) 
+    }}
+{% endblock %}
+
+{% block body %}
+    
+    <div class="container">
+
+        <div class="title2">Мой аккаунт</div>
+
+        <div class="profile-bg">
+            <div class="profile-bg-text">
+                <div class="profile-bg-text-h">
+                    Мой аккаунт
+                </div>
+                <div class="profile-bg-text-t">
+                    Здесь Вы можете легко управлять Вашими личными данными и заказами.
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-option">
+            <div class="option-text">
+                <a href="{{ path('profile_info') }}" class="option-text-bg">
+                    <div class="option-img"><img src="../img/account.png"></div>
+                    <div>Данные аккаунта</div>
+                </a>
+            </div>
+            <div class="option-text">
+                <a href="{{ path('profile_repass') }}" class="option-text-bg">
+                    <div class="option-img"><img src="../img/lock.png"></div>
+                    <div>Смена пароля</div>
+                </a>
+            </div>
+            <div class="option-text">
+                <a href="{{ path('profile_orders') }}" class="option-text-bg">
+                    <div class="option-img"><img src="../img/order.png"></div>
+                    <div>История заказов</div>
+                </a>
+            </div>
+        </div>
+
+        <div class="profile-option">
+            <div class="option-text">
+                <a href="{{ path('app_logout') }}" class="option-text-bg">
+                    <div class="option-img"><img src="../img/account.png"></div>
+                    <div>Выйти из аккаунта</div>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

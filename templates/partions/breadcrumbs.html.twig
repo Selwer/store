@@ -1,0 +1,14 @@
+{% if breadcrumbs %}
+    <div class="container">
+        <div class="breadcrumbs">
+        <a href="/">Главная</a> > 
+        {% for breadcrumb in breadcrumbs %}
+            {% if loop.last %}
+                <span>{{ breadcrumb.text }}</span>
+            {% else %}
+                <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a> > 
+            {% endif %}
+        {% endfor %}
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Мой аккаунт - Мои данные{% endblock %}
+
+{% block breadcrumbs %}
+    {{ include('partions/breadcrumbs.html.twig', 
+        {
+            breadcrumbs: breadcrumbs
+        }) 
+    }}
+{% endblock %}
+
+{% block body %}
+    
+    <div class="container">
+
+        <div class="title2">Мои данные</div>
+        <div class="data-list">
+            <div class="data-item first">
+                <div class="data-item-label">Статус</div><div class="data-item-value">
+                {{ (user.typeuser == 'fiz' ? 'Физ. лицо' : 'Юр. лицо') }}
+                </div>
+            </div>
+            <div class="data-item">
+                <div class="data-item-label">Имя</div><div class="data-item-value">{{ user.firstname }}</div>
+            </div>
+            <div class="data-item">
+                <div class="data-item-label">Фамилия</div><div class="data-item-value">{{ user.lastname }}</div>
+            </div>
+            <div class="data-item">
+                <div class="data-item-label">Email</div><div class="data-item-value">{{ user.email }}</div>
+            </div>
+            <div class="data-item">
+                <div class="data-item-label">Телефон</div><div class="data-item-value">{{ user.mobilephone }}</div>
+            </div>
+            {% if user.typeuser == 'ur' or user.typeuser == 'ur2' %}
+            <div class="data-item">
+                <div class="data-item-label">Название организации</div><div class="data-item-value">{{ user.opfname }}</div>
+            </div>
+            <div class="data-item">
+                <div class="data-item-label">ИНН</div><div class="data-item-value">{{ user.inn }}</div>
+            </div>
+            {% if user.typeuser == 'ur' %}
+            <div class="data-item">
+                <div class="data-item-label">КПП</div><div class="data-item-value">{{ user.kpp }}</div>
+            </div>
+            {% endif %}
+            {% endif %}
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,59 @@
+<div class="catalog-filter-cont">
+    <div class="filter-title">
+        Фильтр по параметрам
+    </div>
+    <div class="catalog-filter-f">
+        <form method="get" action="{{ action }}">
+            <input type="hidden" name="page" value="1">
+            <input type="hidden" name="view" value="{{ view }}">
+            <input type="hidden" name="sort" value="{{ sort }}">
+            <input type="hidden" name="sort_n" value="{{ sortN }}">
+            <div class="form-select">
+                <select class="filter-select" name="brand">
+                    <option value="">Производитель</option>
+                    {% for filter_item in filters.brand %}
+                        <option {{ (filterSelect['brand'] is defined and filterSelect['brand'] == filter_item.p ? 'selected' : '') }} value="{{ filter_item.p }}">{{ filter_item.p }} [{{ filter_item.c }}]</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {# <div class="form-select">
+                <select class="filter-select" name="category">
+                    <option value="">Категория</option>
+                    {% for filter_item in filters.category %}
+                        <option {{ (filterSelect['category'] is defined and filterSelect['category'] == filter_item.p ? 'selected' : '') }} value="{{ filter_item.p }}">{{ filter_item.p }} [{{ filter_item.c }}]</option>
+                    {% endfor %}
+                </select>
+            </div> #}
+            <div class="form-select">
+                <select class="filter-select" name="name">
+                    <option value="">Наименование</option>
+                    {% for filter_item in filters.name %}
+                        <option {{ (filterSelect['name'] is defined and filterSelect['name'] == filter_item.p ? 'selected' : '') }} value="{{ filter_item.p }}">{{ filter_item.p }} [{{ filter_item.c }}]</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-select">
+                <select class="filter-select" name="acb_type">
+                    <option value="">Тип</option>
+                    {% for filter_item in filters.acb_type %}
+                        <option {{ (filterSelect['acb_type'] is defined and filterSelect['acb_type'] == filter_item.p ? 'selected' : '') }} value="{{ filter_item.p }}">{{ filter_item.p }} [{{ filter_item.c }}]</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-select">
+                <select class="filter-select" name="acb_tech">
+                    <option value="">Технология</option>
+                    {% for filter_item in filters.acb_tech %}
+                        <option {{ (filterSelect['acb_tech'] is defined and filterSelect['acb_tech'] == filter_item.p ? 'selected' : '') }} value="{{ filter_item.p }}">{{ filter_item.p }} [{{ filter_item.c }}]</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div style="text-align: right; margin-bottom: 10px; margin-top: 20px;">
+                <button class="btn-n filter-submit" type="submit">Показать</button>
+            </div>
+            <div style="text-align: right;">
+                <a class="filter-reset" href="{{ resetLink }}">Сбросить</a>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,18 @@
+<div class="product-detail-ch-lbl">
+    <div>Производитель</div>
+    <div>Вес</div>
+    <div>Объем</div>
+    <div>Длина</div>
+    <div>Сечение</div>
+    <div>Класс</div>
+    <div>Грузоподъемность/пара</div>
+</div>
+<div class="product-detail-ch-val">
+    <div>{{ product.brand }}</div>
+    <div>{{ product.weight|number_format(3, '.', ' ') }}</div>
+    <div>{{ product.volume|number_format(3, '.', ' ') }}</div>
+    <div>{{ product.fork_length }}</div>
+    <div>{{ product.fork_section }}</div>
+    <div>{{ product.fork_class }}</div>
+    <div>{{ product.fork_load }}</div>
+</div>

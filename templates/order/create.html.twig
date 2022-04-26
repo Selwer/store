@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Заказ создан{% endblock %}
+
+{% block breadcrumbs %}
+    {{ include('partions/breadcrumbs.html.twig', 
+        {
+            breadcrumbs: breadcrumbs
+        }) 
+    }}
+{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+
+        {% if order %}
+            <h1>Создан заказ № {{ order.orderId }}</h1>
+        {% endif %}
+
+        {% if orderPodzapros %}
+            <h1>Создан "под запрос" № {{ orderPodzapros.orderId }}</h1>
+        {% endif %}
+        
+        <div style="margin-top: 20px; margin-bottom: 40px;">В ближайшие время с Вами свяжется наш менеджер.</div>
+        
+    </div>
+
+{% endblock %}
